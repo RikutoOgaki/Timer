@@ -38,7 +38,6 @@ export function TimerComponent() {
 
     function Finish() {
         let time = `${hour}時間${minits}分${second}秒`
-        console.log(time);
 
         setState({
             ...state,
@@ -54,15 +53,15 @@ export function TimerComponent() {
             <Flex w={'100%'} h={'100vh'} justifyContent={'center'} alignItems={'center'} flexDir={'column'}>
                 <Text fontSize={'9xl'}>{hour}時間{minits}分{second}秒</Text>
                 <Flex gap={'3rem'}>
-                    <Button onClick={() => setState({
+                    <Button w={'15rem'} h={'4rem'} onClick={() => setState({
                         ...state,
                         time: true
                     })}>スタート</Button>
-                    <Button onClick={() => setState({
+                    <Button w={'15rem'} h={'4rem'} onClick={() => setState({
                         ...state,
                         time: false
                     })}>ストップ</Button>
-                    <Button onClick={() => {
+                    <Button w={'15rem'} h={'4rem'} onClick={() => {
                         setHour(0), setMinits(0), setSecond(0), setState({
                             ...state,
                             time: false
@@ -71,18 +70,22 @@ export function TimerComponent() {
                 </Flex>
                 <Flex>
                     <Button
+                        w={'15rem'} h={'4rem'}
+                        marginTop={'3rem'}
                         onClick={() => Finish()}
                     >終了</Button>
                 </Flex>
-                {state.list.map((v, idx) =>
-                    <Box key={idx}>
-                        <Text>{v}</Text>
-                        <Button onClick={() => setState({
-                            ...state,
-                            list: state.list.filter((v, idx2) => idx !== idx2)
-                        })}>削除</Button>
-                    </Box>
-                )}
+                <Flex w={'80%'} >
+                    {state.list.map((v, idx) =>
+                        <Flex key={idx} margin={'5rem auto 0'} flexWrap={'wrap'}>
+                            <Text fontSize={'3xl'}>{idx + 1} . {v}</Text>
+                            <Button onClick={() => setState({
+                                ...state,
+                                list: state.list.filter((v, idx2) => idx !== idx2)
+                            })}>削除</Button>
+                        </Flex>
+                    )}
+                </Flex>
             </Flex>
         </>
     )
