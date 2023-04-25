@@ -28,6 +28,7 @@ export function TimerComponent() {
         }
     }
 
+
     useEffect(() => {
         if (state.time) {
             const secondtimer = setInterval(Up, 1000)
@@ -35,12 +36,24 @@ export function TimerComponent() {
         }
     }, [state.time])
 
+    function Finish() {
+        let time = `${hour}時間${minits}分${second}秒`
+        console.log(time);
+
+        setState({
+            ...state,
+            list: [
+                ...state.list,
+                time
+            ]
+        })
+    }
 
     return (
         <>
             <Flex w={'100%'} h={'100vh'} justifyContent={'center'} alignItems={'center'} flexDir={'column'}>
-                <Text fontSize={'9xl'}>{hour}:{minits}:{second}</Text>
-                <Flex>
+                <Text fontSize={'9xl'}>{hour}時間{minits}分{second}秒</Text>
+                <Flex gap={'3rem'}>
                     <Button onClick={() => setState({
                         ...state,
                         time: true
@@ -58,13 +71,7 @@ export function TimerComponent() {
                 </Flex>
                 <Flex>
                     <Button
-                        onClick={() => setState({
-                            ...state,
-                            list: [
-                                ...state.list,
-
-                            ]
-                        })}
+                        onClick={() => Finish()}
                     >終了</Button>
                 </Flex>
                 {state.list.map((v, idx) =>
