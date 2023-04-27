@@ -2,8 +2,9 @@ import { Box, Flex, Text, Button } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 
 type State = {
-    list: Array<string>,
-    time: boolean
+    O: string,
+    Z: string,
+    M: string
 }
 
 export function TimerComponent() {
@@ -11,9 +12,11 @@ export function TimerComponent() {
     let [second, setSecond] = useState(0)
     let [minits, setMinits] = useState(0)
     let [hour, setHour] = useState(0)
-    const [state, setState] = useState<State>({
-        list: [],
-        time: false
+    const [state, setState] = useState(false)
+    const [finish, setFinish] = useState<State>({
+        O: '',
+        Z: '',
+        M: ''
     })
 
     function Up() {
@@ -30,62 +33,67 @@ export function TimerComponent() {
 
 
     useEffect(() => {
-        if (state.time) {
+        if (state) {
             const secondtimer = setInterval(Up, 1000)
             return () => clearInterval(secondtimer)
         }
-    }, [state.time])
+    }, [state])
 
-    function Finish() {
+    function FinishO() {
         let time = `${hour}時間${minits}分${second}秒`
-
-        setState({
-            ...state,
-            list: [
-                ...state.list,
-                time
-            ]
+        setFinish({
+            ...finish,
+            O: time
+        })
+    }
+    function FinishZ() {
+        let time = `${hour}時間${minits}分${second}秒`
+        setFinish({
+            ...finish,
+            Z: time
+        })
+    }
+    function FinishM() {
+        let time = `${hour}時間${minits}分${second}秒`
+        setFinish({
+            ...finish,
+            M: time
         })
     }
 
     return (
         <>
             <Flex w={'100%'} h={'100vh'} justifyContent={'center'} alignItems={'center'} flexDir={'column'}>
-                <Text fontSize={'9xl'}>{hour}時間{minits}分{second}秒</Text>
+                <Text fontSize={{ base: '7xl', lg: '9xl' }}>{hour}時間{minits}分{second}秒</Text>
                 <Flex gap={'3rem'}>
-                    <Button w={'15rem'} h={'4rem'} onClick={() => setState({
-                        ...state,
-                        time: true
-                    })}>スタート</Button>
-                    <Button w={'15rem'} h={'4rem'} onClick={() => setState({
-                        ...state,
-                        time: false
-                    })}>ストップ</Button>
-                    <Button w={'15rem'} h={'4rem'} onClick={() => {
-                        setHour(0), setMinits(0), setSecond(0), setState({
-                            ...state,
-                            time: false
-                        })
+                    <Button w={{ base: '10rem', lg: '15rem' }} h={'4rem'} onClick={() => setState(true)}>スタート</Button>
+                    <Button w={{ base: '10rem', lg: '15rem' }} h={'4rem'} onClick={() => setState(false)}>ストップ</Button>
+                    <Button w={{ base: '10rem', lg: '15rem' }} h={'4rem'} onClick={() => {
+                        setHour(0), setMinits(0), setSecond(0)
                     }}>リセット</Button>
                 </Flex>
-                <Flex>
-                    <Button
-                        w={'15rem'} h={'4rem'}
-                        marginTop={'3rem'}
-                        onClick={() => Finish()}
-                    >終了</Button>
+                <Flex w={'80%'} justifyContent={'space-around'} marginTop={'30rem'} gap={'2rem'}>
+                    <Flex flexDir={'column'} alignItems={'center'}>
+                        <Text fontSize={'3xl'}>O</Text>
+                        <Button onClick={() => FinishO()} w={'10rem'}>終了</Button>
+                        <Text fontSize={{ base: '2xl', lg: '5xl' }}>{finish.O}</Text>
+                    </Flex>
+                    <Flex flexDir={'column'} alignItems={'center'}>
+                        <Text fontSize={'3xl'}>Z</Text>
+                        <Button onClick={() => FinishZ()} w={'10rem'}>終了</Button>
+                        <Text fontSize={{ base: '2xl', lg: '5xl' }}>{finish.Z}</Text>
+                    </Flex>
+                    <Flex flexDir={'column'} alignItems={'center'}>
+                        <Text fontSize={'3xl'}>M</Text>
+                        <Button onClick={() => FinishM()} w={'10rem'}>終了</Button>
+                        <Text fontSize={{ base: '2xl', lg: '5xl' }}>{finish.M}</Text>
+                    </Flex>
                 </Flex>
-                <Flex w={'80%'} >
-                    {state.list.map((v, idx) =>
-                        <Flex key={idx} margin={'5rem auto 0'} flexWrap={'wrap'}>
-                            <Text fontSize={'3xl'}>{idx + 1} . {v}</Text>
-                            <Button onClick={() => setState({
-                                ...state,
-                                list: state.list.filter((v, idx2) => idx !== idx2)
-                            })}>削除</Button>
-                        </Flex>
-                    )}
-                </Flex>
+                <Button marginTop={'3rem'} onClick={() => setFinish({
+                    O: '',
+                    Z: '',
+                    M: ''
+                })}>記録リセット</Button>
             </Flex>
         </>
     )
